@@ -1,0 +1,71 @@
+function [sortedresult] = sortedresult2(A,bckgrnd)
+%SORTING OF VIRUS PARTICLES and intensities into cells
+%   This function sorts the virus particles into different cells with their
+%   mean intensity and also the number of particles which are endocytosed
+%   and their mean intensity.
+
+% (c) Vibhu R Prasad, Universtiy Of Zurich, 
+% last updated Aug 21'2013 2245 (included surface and cytoplasmic particles
+% above threshold for Maarit's SLO experiment)
+
+% finding how many cells are there in the Results matrix
+
+%How many cells are there in the analysis
+bckgrnd=392;
+cells=unique(A(:,1)); 
+cellnum=(length(cells)-1); 
+
+
+thresh_surface=input('Enter the threshold for surface virus : ');
+thresh_cyto=input('Enter the threshold for cytoplasmic virus : ');
+
+for j=1:cellnum
+    B(j,1)=j;
+    
+    ind1=find(A(:,1)==j & A(:,8)~=4 & A(:,8)~=3);
+    
+    B(j,6)=0;
+    B(j,7)=0;
+    B(j,8)=0;
+    
+    for l=1:length(ind1)
+       if A(ind1(l),6) >= thresh_surface
+           B(j,6)=B(j,6)+1;
+       end
+       
+       if A(ind1(l),5) >= thresh_cyto
+           B(j,7)=B(j,7)+1;
+       end
+       
+       if A(ind1(l),6) >= thresh_surface & A(ind1(l),5) >= thresh_cyto
+           B(j,8)=B(j,8)+1;
+       end
+        
+    end
+    
+    
+    
+    B(j,2)=length(ind1);
+    
+    for k=1:length(ind1)
+        val(k)=uint32((A(ind1(k),5)-bckgrnd));
+    end
+    
+    
+    ind1 = [];
+    B(j,3)=(mean(val));
+    val = [];
+    ind2=find(A(:,1)==j & A(:,8)==1);
+    B(j,4)=length(ind2);
+    temp = uint32(A(ind2,5)-bckgrnd);
+    ind2 = [];
+    B(j,5) = mean(temp);
+    temp = [];
+    B(isnan(B))=0;
+end
+
+colnames={'Cell_Numbers','Number_Viruses','MeanInten_Viruses','Number_Endocytosed','MeanInten_Endocytsd', 'Surface_positive', 'Cyto_positive', 'Surface_Cyto_positive'};
+sortedresult=vertcat(colnames,num2cell(B))
+
+end
+
