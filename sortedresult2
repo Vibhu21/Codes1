@@ -37,7 +37,7 @@ for j=1:cellnum
            B(j,7)=B(j,7)+1;
        end
        
-       if A(ind1(l),6) >= thresh_surface & A(ind1(l),5) >= thresh_cyto
+       if A(ind1(l),6) <= thresh_surface & A(ind1(l),5) >= thresh_cyto
            B(j,8)=B(j,8)+1;
        end
         
@@ -64,7 +64,7 @@ for j=1:cellnum
     B(isnan(B))=0;
 end
 
-colnames={'Cell_Numbers','Number_Viruses','MeanInten_Viruses','Number_Endocytosed','MeanInten_Endocytsd', 'Surface_positive', 'Cyto_positive', 'Surface_Cyto_positive'};
+colnames={'Cell_Numbers','Number_Viruses','MeanInten_Viruses','Number_Endocytosed','MeanInten_Endocytsd', 'Surface_positive', 'Cyto_positive', 'Cyto_positive_Surface_negative'};
 sortedresult=vertcat(colnames,num2cell(B))
 
 end
