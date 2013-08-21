@@ -11,7 +11,6 @@ function [sortedresult] = sortedresult2(A,bckgrnd)
 % finding how many cells are there in the Results matrix
 
 %How many cells are there in the analysis
-bckgrnd=392;
 cells=unique(A(:,1)); 
 cellnum=(length(cells)-1); 
 
